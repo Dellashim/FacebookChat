@@ -10,11 +10,9 @@ class FacebookChatParser(object):
         self.parse_file(filename)
         
     def parse_file(self, filename):
-        filename = filename
         tree = ET.parse(filename)
-        root = tree
         self.data = []
-        for element in root.find("/body/div[@class='thread']"):
+        for element in tree.find("/body/div[@class='thread']"):
             if element.tag == "div" and element.get("class") == "message":
                 user = element.find(".//span[@class='user']").text
                 # TODO: parse into proper datetime object
@@ -39,6 +37,9 @@ class FacebookChatParser(object):
             writer = csv.writer(csvfile)
             for row in self.data:
                 writer.writerow(row)
+
+    def get_data(self):
+        return self.data
 
 if __name__ == "__main__":
     parser = FacebookChatParser("C:\\Users\\Alex\\Downloads\\151.html")
